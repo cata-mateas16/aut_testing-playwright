@@ -1,19 +1,18 @@
-export class playwrightPage {
+export class DemoPage {
   constructor(page) {
     this.page = page;
 
     /* todo components */
     this.todoInsertField = page.getByPlaceholder('What needs to be done?');
     this.todoItemList = page.getByTestId('todo-title')
-    this.removeTodoItem = page.getByRole('button', { name: 'Delete' });
     this.deleteButton = page.getByRole('button', { name: 'Delete' });
-    this.nrOfItemsInTodoList = page.locator('span[data-testid="todo-count"]').nth(0).locator('strong');
+    this.nrOfItemsInTodoList = page.locator('span[data-testid="todo-count"]').first().locator('strong');
     this.checkBoxItem = page.locator('.toggle').first();
     this.activeButton = page.getByRole('link', { name: 'Active' });
     this.completedButton = page.getByRole('link', { name: 'Completed' });
     this.clearCompletedButton = page.getByRole('button', { name: 'Clear completed' });
     this.todoEditItem = page.getByTestId('todo-item');
-    this.taskTextBox = page.getByRole('textbox', { name: 'Edit' }); //this is the locator
+    this.taskTextBox = page.getByRole('textbox', { name: 'Edit' });
 
     /* footer links */
     this.createdByLink = page.getByRole('link', { name: 'Remo H. Jansen' });
@@ -26,11 +25,9 @@ export class playwrightPage {
 
   async accessPage() {
     await this.page.goto('https://demo.playwright.dev/todomvc');
-    await this.page.context().clearCookies();
   }
 
-  async insertItemsInTodoList() {
-    const todoList = ['buy coffee', 'wash dishes', 'clean shoes'];
+  async insertItemsInTodoList(todoList) {
     for (let task of todoList) {
       await this.todoInsertField.fill(task);
       await this.todoInsertField.press('Enter');
@@ -52,16 +49,17 @@ export class playwrightPage {
     await button.click();
   }
 
-  async enterEditTaskMode() {
-    await this.insertItemsInTodoList();
+  async enterFirstElementEditMode(todoList) {
+    await this.insertItemsInTodoList(todoList);
     const task = this.todoEditItem.first();
     await task.dblclick();
   }
 
   async editTask(text, key) {
     const firstTask = this.todoEditItem.first();
-    await firstTask.getByRole('textbox', { name: 'Edit' }).fill(text);
-    await firstTask.getByRole('textbox', { name: 'Edit' }).press(key); //dunno how to acces locator other ways ^
+    // await firstTask.getByRole('textbox', { name: 'Edit' }).fill(text);
+    await firstTask.locator(this.taskTextBox).fill(text);
+    await firstTask.locator(this.taskTextBox).press(key);
   }
 
   async getTodoItems() {
@@ -71,5 +69,4 @@ export class playwrightPage {
       items.push(this.todoEditItem.nth(i));
     return items;
   }
-
 }
