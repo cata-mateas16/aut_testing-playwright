@@ -1,0 +1,25 @@
+{
+  "name": "learning-playwright",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test --workers=4",
+    "test:ui": "npx playwright test --ui",
+    "test:debug": "npx playwright test -g 'test_name' --debug",
+    "test:generateReport": "allure generate allure-results -o allure-report --clean",
+    "test:showReport": "allure open allure-report"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "16.4.5"
+  },
+  "description": "",
+  "devDependencies": {
+    "@playwright/test": "1.45.2",
+    "@types/node": "20.14.11",
+    "allure-playwright": "^2.15.1",
+    "eslint": "8.57.0"
+  }
+}
